@@ -41,3 +41,15 @@ export async function create(name, username, password, email, url = "") {
   delete newUser.password;
   return newUser;
 }
+
+export async function get(username) {
+  const user = users.find((user) => user.username === username);
+  const payload = JSON.parse(JSON.stringify(user));
+  delete payload.password;
+  return payload;
+}
+
+export async function getHash(username) {
+  const user = users.find((user) => user.username === username);
+  return user.password;
+}
