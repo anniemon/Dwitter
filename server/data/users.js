@@ -51,5 +51,9 @@ export async function get(username) {
 
 export async function getHash(username) {
   const user = users.find((user) => user.username === username);
-  return user.password;
+  try {
+    return user.password;
+  } catch (err) {
+    console.error(err);
+  }
 }
