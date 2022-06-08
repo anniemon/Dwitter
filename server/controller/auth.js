@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import * as userRepository from "../data/users.js";
-import dotenv from "dotenv";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import * as userRepository from '../data/users.js';
+import dotenv from 'dotenv';
 dotenv.config();
 const jwtSecret = process.env.jwtSecret;
 
@@ -25,7 +25,7 @@ export async function login(req, res) {
   const hash = await userRepository.getHash(username);
   const isMatched = await bcrypt.compareSync(password, hash);
   if (!isMatched) {
-    return res.status(403).send("아이디 또는 비밀번호를 확인해주세요");
+    return res.status(403).send('아이디 또는 비밀번호를 확인해주세요');
   } else {
     const user = await userRepository.get(username);
     const token = jwt.sign(user, jwtSecret, { expiresIn: 15 });
@@ -34,7 +34,7 @@ export async function login(req, res) {
 }
 
 export async function me(req, res) {
-  const token = req.headers["authorization"].split(" ")[1];
+  const token = req.headers['authorization'].split(' ')[1];
   const payload = jwt.verify(token, jwtSecret);
   try {
     res.status(200).json({ token: token, username: payload.username });

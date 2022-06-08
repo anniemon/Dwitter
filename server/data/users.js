@@ -1,33 +1,33 @@
 let users = [
   {
-    id: "1",
+    id: '1',
     createdAt: Date.now().toString(),
-    name: "Bob",
-    username: "kelly",
-    email: "kelly@gmail.com",
-    password: "",
-    url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
+    name: 'Bob',
+    username: 'kelly',
+    email: 'kelly@gmail.com',
+    password: '',
+    url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png'
   },
   {
-    id: "2",
+    id: '2',
     createdAt: Date.now().toString(),
-    name: "Ellie",
-    username: "ellie",
-    email: "ellie@example.com",
-    password: "",
-    url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
+    name: 'Ellie',
+    username: 'ellie',
+    email: 'ellie@example.com',
+    password: '',
+    url: 'https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png'
   },
   {
-    id: "3",
+    id: '3',
     createdAt: Date.now().toString(),
-    name: "hey",
-    username: "hello",
-    email: "hello@gmail.com",
-    password: "",
-  },
+    name: 'hey',
+    username: 'hello',
+    email: 'hello@gmail.com',
+    password: ''
+  }
 ];
 
-export async function create(name, username, password, email, url = "") {
+export async function create(name, username, password, email, url = '') {
   const newUser = {
     id: Date.now().toString(),
     createdAt: new Date(),
@@ -35,7 +35,7 @@ export async function create(name, username, password, email, url = "") {
     username,
     password,
     email,
-    url,
+    url
   };
   users = [...users, JSON.parse(JSON.stringify(newUser))];
   delete newUser.password;
