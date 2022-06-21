@@ -5,9 +5,32 @@ import * as authController from "../controller/auth.js";
 import { validate } from "../middleware/validator.js";
 const router = express.Router();
 
-router.post("/signup", authController.signup);
+const usernameValidator = [
+  body("username")
+    .trim()
+    .isLength({ min: 4 })
+    .withMessage("username should be at least 4 characters"),
+  validate,
+];
 
-router.post("/login", authController.login);
+const passwordValidator = [
+  body("password")
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage("password should be at least 8 characters"),
+  validate,
+];
+
+router.post(
+  "/signup",
+  usernameValidator,
+  passwordValidator,
+  authController.signup
+);
+
+//TODO: req 필수 요소 검사
+
+router.post("/login", usernameValidator, authController.login);
 
 router.get("/me", authController.me);
 
