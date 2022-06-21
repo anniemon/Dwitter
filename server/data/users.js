@@ -42,18 +42,15 @@ export async function create(name, username, password, email, url = "") {
   return newUser;
 }
 
-export async function get(username) {
+export async function get(username, requirePassword = false) {
   const user = users.find((user) => user.username === username);
-  const payload = JSON.parse(JSON.stringify(user));
-  delete payload.password;
-  return payload;
-}
-
-export async function getHash(username) {
-  const user = users.find((user) => user.username === username);
-  try {
-    return user.password;
-  } catch (err) {
-    console.error(err);
+  if (!user) return null;
+  else {
+    if (requirePassword) {
+      return user;
+    }
+    const payload = JSON.parse(JSON.stringify(user));
+    delete payload.password;
+    return payload;
   }
 }
