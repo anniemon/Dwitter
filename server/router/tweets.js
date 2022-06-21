@@ -12,6 +12,7 @@ const tweetValidator = [
     .withMessage("text should be between 3 and 140 characters"),
   validate,
 ];
+//TODO: req 필수 요소 검사
 
 // GET /tweets
 // GET /tweets?username=:username

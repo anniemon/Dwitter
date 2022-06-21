@@ -28,6 +28,10 @@ let users = [
 ];
 
 export async function create(name, username, password, email, url = "") {
+  const isExist = users.find((user) => user.username === username);
+  if (isExist) {
+    throw new Error(`${username} already exists`);
+  }
   const newUser = {
     id: Date.now().toString(),
     createdAt: new Date(),
