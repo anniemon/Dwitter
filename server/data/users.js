@@ -14,7 +14,7 @@ let users = [
     name: "Ellie",
     username: "ellie",
     email: "ellie@example.com",
-    password: "",
+    password: "$2b$10$h1mNHkpQGgilGQu0UYeoC.K2PSoNStFHFuPg7ZzrZ9rW2fZ9x78RC", //1234asdf
     url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
   },
   {
@@ -53,4 +53,12 @@ export async function get(username, requirePassword = false) {
     delete payload.password;
     return payload;
   }
+}
+
+export async function findById(id) {
+  const user = users.find((user) => user.id === id);
+  if (!user) return null;
+  const payload = JSON.parse(JSON.stringify(user));
+  delete payload.password;
+  return payload;
 }
