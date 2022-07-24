@@ -1,8 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import * as userRepository from "../data/users.js";
-import dotenv from "dotenv";
-dotenv.config();
 const jwtSecret = process.env.jwtSecret;
 
 export async function signup(req, res) {
@@ -47,11 +47,10 @@ function createJwtToken(user) {
 }
 
 export async function me(req, res) {
-  const token = req.headers["authorization"].split(" ")[1];
-  const payload = jwt.verify(token, jwtSecret);
-  try {
-    res.status(200).json({ token: token, username: payload.username });
-  } catch (err) {
-    console.error(err);
+  //* db에 유저가 있는지 확인하는 과정은 생략 가능
+  const user = await userRepository.findById(req.userId);
+  if (!user) {
+    return res.status(401).send(`user does not exist`);
   }
+  res.status(200).json({ token: req.token, username: user.username });
 }

@@ -3,6 +3,7 @@ import "express-async-errors";
 import { body } from "express-validator";
 import * as authController from "../controller/auth.js";
 import { validate } from "../middleware/validator.js";
+import { isAuth } from "../middleware/auth.js";
 const router = express.Router();
 
 const validateCredentials = [
@@ -29,11 +30,7 @@ const validateSignup = [
 ];
 
 router.post("/signup", validateSignup, authController.signup);
-
-//TODO: req 필수 요소 검사
-
 router.post("/login", validateCredentials, authController.login);
-
-router.get("/me", authController.me);
+router.get("/me", isAuth, authController.me);
 
 export default router;
