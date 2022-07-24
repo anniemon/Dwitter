@@ -19,7 +19,7 @@ export async function signup(req, res) {
     email,
     url
   );
-  const token = jwt.sign(user, jwtSecret, { expiresIn: 150 });
+  const token = createJwtToken(user);
   return res.status(201).json({ token: token, username: user.username });
 }
 
@@ -34,12 +34,16 @@ export async function login(req, res) {
     return res.status(403).send("아이디 또는 비밀번호를 확인해주세요");
   }
   try {
-    const token = jwt.sign(user, jwtSecret, { expiresIn: 15 });
+    const token = createJwtToken(user);
     res.status(200).json({ token: token, username: user.username });
   } catch (err) {
     console.error(err);
     throw new Error("signing token fails");
   }
+}
+
+function createJwtToken(user) {
+  return jwt.sign(user, jwtSecret, { expiresIn: `2d` });
 }
 
 export async function me(req, res) {
