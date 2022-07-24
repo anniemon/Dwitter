@@ -5,15 +5,11 @@ import * as authController from "../controller/auth.js";
 import { validate } from "../middleware/validator.js";
 const router = express.Router();
 
-const usernameValidator = [
+const validateCredentials = [
   body("username")
     .trim()
     .isLength({ min: 4 })
     .withMessage("username should be at least 4 characters"),
-  validate,
-];
-
-const passwordValidator = [
   body("password")
     .trim()
     .isLength({ min: 8 })
@@ -21,16 +17,22 @@ const passwordValidator = [
   validate,
 ];
 
-router.post(
-  "/signup",
-  usernameValidator,
-  passwordValidator,
-  authController.signup
-);
+const validateSignup = [
+  ...validateCredentials,
+  //* validation에 bug가 있음...
+  body("name").notEmpty().withMessage("name is missing"),
+  body("email").isEmail().normalizeEmail().withMessage("invalid email"),
+  body("url")
+    .isURL()
+    .withMessage("invalid URL")
+    .optional({ nullable: true, checkFalsy: true }),
+];
+
+router.post("/signup", validateSignup, authController.signup);
 
 //TODO: req 필수 요소 검사
 
-router.post("/login", usernameValidator, authController.login);
+router.post("/login", validateCredentials, authController.login);
 
 router.get("/me", authController.me);
 
