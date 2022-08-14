@@ -26,7 +26,7 @@ const validateSignup = [
   body("url")
     .isURL()
     .withMessage("invalid URL")
-    .optional({ nullable: true, checkFalsy: true }),
+    .optional({ nullable: true, checkFalsy: true }), //null이거나 빈 문자열 허용
 ];
 
 router.post("/signup", validateSignup, authController.signup);
