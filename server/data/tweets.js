@@ -1,65 +1,73 @@
+import * as userRepository from "../data/users.js";
+
 let tweets = [
   {
     id: "1",
     text: "화이팅!",
-    createdAt: Date.now().toString(),
-    name: "Bob",
-    username: "bob",
-    url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
+    createdAt: new Date().toString(),
+    userId: "1",
   },
   {
     id: "2",
     text: "안뇽!",
-    createdAt: Date.now().toString(),
-    name: "Ellie",
-    username: "ellie",
+    createdAt: new Date().toString(),
+    userId: "2",
   },
   {
     id: "3",
     text: "커몬",
-    createdAt: Date.now().toString(),
-    name: "hey",
-    username: "hello",
+    createdAt: new Date().toString(),
+    userId: "3",
   },
   {
     id: "4",
     text: "good job",
-    createdAt: Date.now().toString(),
-    name: "sweet",
-    username: "girl",
+    createdAt: new Date().toString(),
+    userId: "1",
   },
   {
     id: "5",
     text: "good morning y'all",
-    createdAt: Date.now().toString(),
-    name: "some",
-    username: "guy",
+    createdAt: new Date().toString(),
+    userId: "2",
   },
 ];
 
 export async function getAll() {
-  return tweets;
+  return Promise.all(
+    tweets.map(async (tweet) => {
+      const { username, name, url } = await userRepository.findById(
+        tweet.userId
+      );
+      return { ...tweet, username, name, url };
+    })
+  );
 }
 
 export async function getByUsername(username) {
-  return tweets.filter((tweet) => tweet.username === username);
+  return getAll().then((tweets) =>
+    tweets.filter((tweet) => tweet.username === username)
+  );
 }
 
 export async function findById(id) {
   const found = tweets.find((tweet) => tweet.id === id);
-  return found;
+  if (!found) {
+    return null;
+  }
+  const { username, name, url } = await userRepository.findById(found.userId);
+  return { ...found, username, name, url };
 }
 
-export async function create(text, name, username) {
+export async function create(text, userId) {
   const tweet = {
-    id: Date.now().toString(),
+    id: new Date().toString(),
     text,
     createdAt: new Date(),
-    name,
-    username,
+    userId,
   };
   tweets = [tweet, ...tweets];
-  return tweet;
+  return findById(tweet.id);
 }
 
 export async function update(id, text) {
@@ -67,7 +75,7 @@ export async function update(id, text) {
   if (tweet) {
     tweet.text = text;
   }
-  return tweet;
+  return findById(tweet.id);
 }
 
 export async function remove(id) {

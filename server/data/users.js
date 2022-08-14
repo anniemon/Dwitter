@@ -1,16 +1,16 @@
 let users = [
   {
     id: "1",
-    createdAt: Date.now().toString(),
+    createdAt: new Date().toString(),
     name: "Bob",
-    username: "kelly",
+    username: "bob",
     email: "kelly@gmail.com",
     password: "",
     url: "https://widgetwhats.com/app/uploads/2019/11/free-profile-photo-whatsapp-1.png",
   },
   {
     id: "2",
-    createdAt: Date.now().toString(),
+    createdAt: new Date().toString(),
     name: "Ellie",
     username: "ellie",
     email: "ellie@example.com",
@@ -19,7 +19,7 @@ let users = [
   },
   {
     id: "3",
-    createdAt: Date.now().toString(),
+    createdAt: new Date().toString(),
     name: "hey",
     username: "hello",
     email: "hello@gmail.com",
@@ -29,7 +29,7 @@ let users = [
 
 export async function create(name, username, password, email, url = "") {
   const newUser = {
-    id: Date.now().toString(),
+    id: new Date().toString(),
     createdAt: new Date(),
     name,
     username,

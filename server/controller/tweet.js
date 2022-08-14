@@ -19,8 +19,9 @@ export async function getTweetsById(req, res) {
 }
 
 export async function postTweet(req, res) {
-  const { text, name, username } = req.body;
-  const tweet = await TweetRepository.create(text, name, username);
+  const { text } = req.body;
+  const userId = req.userId;
+  const tweet = await TweetRepository.create(text, userId);
   res.status(201).json(tweet);
 }
 
