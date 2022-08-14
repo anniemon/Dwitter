@@ -38,8 +38,7 @@ export async function create(name, username, password, email, url = "") {
     url,
   };
   users = [...users, JSON.parse(JSON.stringify(newUser))];
-  delete newUser.password;
-  return newUser;
+  return newUser.id;
 }
 
 export async function get(username, requirePassword = false) {
