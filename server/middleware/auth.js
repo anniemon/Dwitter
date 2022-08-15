@@ -13,14 +13,18 @@ export const isAuth = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  const payload = jwt.verify(token, jwtSecret);
-  //* db에 유저가 있는지 확인하는 과정은 생략 가능
-  const user = await userRepository.findById(payload.id);
-  if (!payload || !user) {
-    return res.status(401).json(AUTH_ERROR);
-  }
-  //* req.customData
-  req.userId = user.id;
-  req.token = token;
-  next();
+  jwt.verify(token, jwtSecret, async (err, decoded) => {
+    if (err) {
+      return res.status(401).json(AUTH_ERROR);
+    }
+    //* db에 유저가 있는지 확인하는 과정은 생략 가능
+    const user = await userRepository.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json(AUTH_ERROR);
+    }
+    //* req.customData
+    req.userId = user.id;
+    req.token = token;
+    next();
+  });
 };
