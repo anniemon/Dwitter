@@ -1,36 +1,50 @@
 export default class TweetService {
-  constructor(http) {
+  constructor(http, tokenStorage) {
     this.http = http;
+    this.tokenStorage = tokenStorage;
   }
 
   async getTweets(username) {
+    const headers = await this.getHeaders();
     let query = username ? `?username=${username}` : "";
-    return this.http.fetch(`/tweets${query}`, {
+    return await this.http.fetch(`/tweets${query}`, {
       method: "GET",
+      headers: headers,
     });
   }
 
   async postTweet(text) {
-    return this.http.fetch(`/tweets/`, {
+    const headers = this.getHeaders();
+    return await this.http.fetch(`/tweets`, {
       method: "POST",
+      headers: headers,
       body: JSON.stringify({
         text,
-        username: "ellie",
-        name: "Ellie",
       }),
     });
   }
 
   async deleteTweet(tweetId) {
-    return this.http.fetch(`/tweets/${tweetId}`, {
+    const headers = this.getHeaders();
+    return await this.http.fetch(`/tweets/${tweetId}`, {
       method: "DELETE",
+      headers: headers,
     });
   }
 
   async updateTweet(tweetId, text) {
-    return this.http.fetch(`/tweets/${tweetId}`, {
+    const headers = this.getHeaders();
+    return await this.http.fetch(`/tweets/${tweetId}`, {
       method: "PUT",
+      headers: headers,
       body: JSON.stringify({ text }),
     });
+  }
+
+  getHeaders() {
+    const token = this.tokenStorage.getToken();
+    return {
+      Authorization: "Bearer " + token,
+    };
   }
 }
