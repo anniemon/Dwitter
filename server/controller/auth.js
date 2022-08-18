@@ -3,7 +3,7 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import * as userRepository from "../data/users.js";
-const jwtSecret = process.env.jwtSecret;
+import { config } from "../config.js";
 
 export async function signup(req, res) {
   const { name, username, password, email, url } = req.body;
@@ -11,7 +11,10 @@ export async function signup(req, res) {
   if (userExists) {
     return res.status(409).send(`${username} already exists`);
   }
-  const hashedPassword = await bcrypt.hashSync(password, 10);
+  const hashedPassword = await bcrypt.hashSync(
+    password,
+    config.bcrypt.saltRounds
+  );
   const userId = await userRepository.create(
     name,
     username,
@@ -43,7 +46,9 @@ export async function login(req, res) {
 }
 
 function createJwtToken(userId) {
-  return jwt.sign({ id: userId }, jwtSecret, { expiresIn: "2d" });
+  return jwt.sign({ id: userId }, config.jwt.secretKey, {
+    expiresIn: config.jwt.expiresIn,
+  });
 }
 
 export async function me(req, res) {

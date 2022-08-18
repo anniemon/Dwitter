@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 import * as userRepository from "../data/users.js";
-import dotenv from "dotenv";
-dotenv.config();
-const jwtSecret = process.env.jwtSecret;
+import { config } from "../config.js";
 
 const AUTH_ERROR = { message: "Authentication Error" };
 
@@ -13,7 +11,7 @@ export const isAuth = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, jwtSecret, async (err, decoded) => {
+  jwt.verify(token, config.jwt.secretKey, async (err, decoded) => {
     if (err) {
       return res.status(401).json(AUTH_ERROR);
     }
