@@ -23,7 +23,7 @@ let users = [
     name: "hey",
     username: "hello",
     email: "hello@gmail.com",
-    password: "",
+    password: "$2b$10$h1mNHkpQGgilGQu0UYeoC.K2PSoNStFHFuPg7ZzrZ9rW2fZ9x78RC",
   },
 ];
 
