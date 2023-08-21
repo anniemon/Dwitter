@@ -28,7 +28,7 @@ export async function signup(req, res) {
 
 export async function login(req, res) {
   const { username, password } = req.body;
-  const user = await userRepository.get(username, true);
+  const user = await userRepository.get(username);
   if (!user) {
     return res.status(401).send("아이디 또는 비밀번호를 확인해주세요");
   }

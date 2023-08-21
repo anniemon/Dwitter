@@ -1,5 +1,16 @@
-import MongoDb from "mongodb";
-import { getUsers } from '../database/database.js';
+import Mongoose from "mongoose";
+import { useVirtualId } from '../database/database.js';
+
+const userSchema = new Mongoose.Schema({
+  username: { type: String, required: true },
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  url: String,
+});
+
+useVirtualId(userSchema);
+const User = Mongoose.model('User', userSchema);
 
 export async function create(name, username, password, email, url = "") {
   const newUser = {
@@ -10,26 +21,13 @@ export async function create(name, username, password, email, url = "") {
     email,
     url,
   };
-  return getUsers().insertOne(newUser).then(data => data.insertedId.toString());
+  return new User(newUser).save().then(data => data.id);
 }
 
-export async function get(username, requirePassword = false) {
-  const user = getUsers().findOne({ username }).then(mapOptionalUser);
-  if(!user) return null;
-  if (requirePassword) {
-    return user;
-  }
-  delete user.password;
-  return user;
+export async function get(username) {
+  return User.findOne({ username });
 }
 
 export async function findById(id) {
-  const user = getUsers().findOne({ _id : new MongoDb.ObjectId(id) }).then(mapOptionalUser);
-  if (!user) return null;
-  delete user.password;
-  return user;
-}
-
-const mapOptionalUser = (user) => {
-  return user ? {...user, id: user._id.toString() } : user;
+  return User.findById(id);
 }
